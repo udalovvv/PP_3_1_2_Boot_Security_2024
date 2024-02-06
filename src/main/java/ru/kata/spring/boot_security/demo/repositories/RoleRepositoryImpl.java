@@ -6,12 +6,12 @@ import ru.kata.spring.boot_security.demo.entity.Role;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+
 @Repository
 public class RoleRepositoryImpl implements RoleRepository{
 
     @PersistenceContext
     private EntityManager em;
-
 
     @Override
     public Role findRoleById(long id) {
