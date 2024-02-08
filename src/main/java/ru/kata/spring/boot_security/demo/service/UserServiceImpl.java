@@ -13,6 +13,7 @@ import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -42,11 +43,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     public void save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        List<Role> roleList =  user.getRoles().stream()
+        Set<Role> roleSet =  user.getRoles().stream()
                 .map(role -> roleRepository.findRoleById(Long.parseLong(role.getRole())))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
-        user.setRoles(roleList);
+        user.setRoles(roleSet);
         userRepository.save(user);
     }
 
@@ -58,11 +59,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public void updateUser(long id, User updatedUser) {
-        List<Role> roleList =  updatedUser.getRoles().stream()
+        Set<Role> roleSet =  updatedUser.getRoles().stream()
                 .map(role -> roleRepository.findRoleById(Long.parseLong(role.getRole())))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
-        updatedUser.setRoles(roleList);
+        updatedUser.setRoles(roleSet);
         userRepository.updateUser(id, updatedUser);
     }
 

@@ -15,7 +15,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        return em.createQuery("FROM User").getResultList();
+        return em.createQuery("select distinct u from User u left join fetch u.roles").getResultList();
     }
 
     @Override

@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -44,7 +44,7 @@ public class User implements UserDetails {
     @NotEmpty(message = "Не может быть пустым")
     @Email(message = "Email не корректен")
     @NonNull
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @NotEmpty(message = "Не может быть пустым")
@@ -56,7 +56,7 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private List<Role> roles;
+    private Set<Role> roles;
 
     public void addRole(Role role) {
         roles.add(role);
