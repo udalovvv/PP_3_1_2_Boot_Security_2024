@@ -2,12 +2,14 @@ package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.entity.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 import javax.validation.Valid;
 
@@ -22,6 +24,7 @@ public class AdminController {
     private static final String AUTHENTICATION = "authentication";
 
     private final UserService userService;
+
 
     @Autowired
     public AdminController(UserService userService) {
@@ -52,6 +55,10 @@ public class AdminController {
                       BindingResult bindingResult,
                       Authentication authentication,
                       Model userModel) {
+        if (userService.findByEmail(user.getEmail()) != null) {
+            bindingResult.rejectValue("email", "error.user", "Пользователь с таким email уже существует");
+        }
+
         if (bindingResult.hasErrors()) {
             userModel.addAttribute(AUTHENTICATION, authentication);
             userModel.addAttribute(AUTHUSER, authentication.getPrincipal());

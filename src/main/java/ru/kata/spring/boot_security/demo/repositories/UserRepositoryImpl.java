@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.entity.User;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
@@ -54,7 +55,12 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findByEmail(String username) {
         String hql = "Select u from User u left join fetch u.roles where u.email=:emailParam";
-        em.createQuery(hql).setParameter("emailParam", username).getSingleResult();
+        try {
+            em.createQuery(hql).setParameter("emailParam", username).getSingleResult();
+        } catch (NoResultException noResultException) {
+            return null;
+        }
+
         return (User) em.createQuery(hql).setParameter("emailParam", username).getSingleResult();
     }
 }
