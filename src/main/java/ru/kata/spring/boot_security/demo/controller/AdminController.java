@@ -14,6 +14,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/admin")
+@CrossOrigin
 public class AdminController {
 
     private static final String REDIRECT_ADMIN = "redirect:/admin";

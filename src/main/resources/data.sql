@@ -1,9 +1,9 @@
 INSERT INTO users (`age`, `email`, `first_name`, `last_name`, `password`)
-VALUES ('1', 'admin@mail.ru', 'admin', 'admin', '$2a$12$cm066YTzIjDk0C361x6u1eKYiBsX0e/3abc5UCm.FvD5xdq4aSwLG');
--- password = 1
+VALUES ('1', 'admin@mail.ru', 'admin', 'admin', '$2a$12$iCZIGBvFU6Yud/n15FBFzu95xo4413RCEr2ou4FVdAxiv1WGmnpXC');
+-- password = admin
 
 INSERT INTO users (`age`, `email`, `first_name`, `last_name`, `password`)
-VALUES ('2', 'user@mail.ru', 'user', 'user', '$2a$12$cm066YTzIjDk0C361x6u1eKYiBsX0e/3abc5UCm.FvD5xdq4aSwLG');
+VALUES ('2', 'user@mail.ru', 'user', 'user', '$2a$12$7nQFArHFyDuVN0uH13O7ius6ij/D.Ywv0EoETOGgK4zcVCnkyVls6');
 -- password = 1
 
 INSERT INTO roles (`role`)
