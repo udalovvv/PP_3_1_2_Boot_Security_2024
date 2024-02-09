@@ -25,22 +25,31 @@ public class User implements UserDetails {
 
     @NonNull
     @Column(name = "first_name")
+    @NotEmpty(message = "Не может быть пустым")
+    @Size(min = 2, max = 20, message = "Длина имени доджна быть от 2 до 20 символов")
     private String firstName;
 
     @NonNull
     @Column(name = "last_name")
+    @NotEmpty(message = "Не может быть пустым")
+    @Size(min = 2, max = 20, message = "Длина фамилии доджна быть от 2 до 20 символов")
     private String lastName;
 
     @NonNull
     @Column(name = "age")
+    @Min(value = 0, message = "Возрат не должен быть меньше 0")
+    @Max(value = 150, message = "Возраст не должен быть больше 150")
     private byte age;
 
     @NonNull
     @Column(name = "email", unique = true)
+    @NotEmpty(message = "Не может быть пустым")
+    @Email(message = "Email не корректен")
     private String email;
 
     @NonNull
     @Column(name = "password")
+    @NotEmpty(message = "Не может быть пустым")
     private String  password;
 
     @NonNull

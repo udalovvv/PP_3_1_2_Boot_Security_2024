@@ -6,10 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.dto.UserDTO;
 import ru.kata.spring.boot_security.demo.entity.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
-import ru.kata.spring.boot_security.demo.utils.UserMapper;
 
 import javax.validation.Valid;
 
@@ -25,13 +23,11 @@ public class AdminController {
 
     private final UserService userService;
 
-    private final UserMapper userMapper;
 
 
     @Autowired
-    public AdminController(UserService userService, UserMapper userMapper) {
+    public AdminController(UserService userService) {
         this.userService = userService;
-        this.userMapper = userMapper;
     }
 
     @GetMapping("")
@@ -54,12 +50,13 @@ public class AdminController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("newUser") @Valid UserDTO user,
+    public String add(@ModelAttribute("newUser") @Valid User user,
                       BindingResult bindingResult,
                       Authentication authentication,
                       Model userModel) {
         if (userService.findByEmail(user.getEmail()) != null) {
-            bindingResult.rejectValue("email", "error.user", "Пользователь с таким email уже существует");
+            bindingResult.rejectValue("email", "error.user",
+                    "Пользователь с таким email уже существует");
         }
 
         if (bindingResult.hasErrors()) {
@@ -67,7 +64,7 @@ public class AdminController {
             userModel.addAttribute(AUTHUSER, authentication.getPrincipal());
             return "pages/add";
         }
-        userService.save(userMapper.userDtoToUser(user));
+        userService.save(user);
         return REDIRECT_ADMIN;
     }
 
@@ -84,7 +81,7 @@ public class AdminController {
 
     @PostMapping("/edit")
     public String edit(@RequestParam("id") long id,
-                       @ModelAttribute("user") @Valid UserDTO user,
+                       @ModelAttribute("user") @Valid User user,
                        BindingResult bindingResult,
                        Model userModel,
                        Authentication authentication) {
@@ -94,8 +91,7 @@ public class AdminController {
             return "pages/edit";
         }
 
-        user.setPassword(userService.findByEmail(user.getEmail()).getPassword());
-        userService.updateUser(id, userMapper.userDtoToUser(user));
+        userService.updateUser(id, user);
         return REDIRECT_ADMIN;
     }
 
