@@ -2,14 +2,14 @@ package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.dto.UserDTO;
 import ru.kata.spring.boot_security.demo.entity.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
-import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
+import ru.kata.spring.boot_security.demo.utils.UserMapper;
 
 import javax.validation.Valid;
 
@@ -25,10 +25,13 @@ public class AdminController {
 
     private final UserService userService;
 
+    private final UserMapper userMapper;
+
 
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
     @GetMapping("")
@@ -51,7 +54,7 @@ public class AdminController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("newUser") @Valid User user,
+    public String add(@ModelAttribute("newUser") @Valid UserDTO user,
                       BindingResult bindingResult,
                       Authentication authentication,
                       Model userModel) {
@@ -64,7 +67,7 @@ public class AdminController {
             userModel.addAttribute(AUTHUSER, authentication.getPrincipal());
             return "pages/add";
         }
-        userService.save(user);
+        userService.save(userMapper.userDtoToUser(user));
         return REDIRECT_ADMIN;
     }
 
@@ -81,16 +84,18 @@ public class AdminController {
 
     @PostMapping("/edit")
     public String edit(@RequestParam("id") long id,
-                       @ModelAttribute("user") User user,
+                       @ModelAttribute("user") @Valid UserDTO user,
                        BindingResult bindingResult,
                        Model userModel,
                        Authentication authentication) {
-        if (bindingResult. hasErrors() && !bindingResult.hasFieldErrors("password")) {
+        if (bindingResult. hasErrors() && bindingResult.getErrorCount() > 1) {
             userModel.addAttribute(AUTHENTICATION, authentication);
             userModel.addAttribute(AUTHUSER, authentication.getPrincipal());
             return "pages/edit";
         }
-        userService.updateUser(id, user);
+
+        user.setPassword(userService.findByEmail(user.getEmail()).getPassword());
+        userService.updateUser(id, userMapper.userDtoToUser(user));
         return REDIRECT_ADMIN;
     }
 
