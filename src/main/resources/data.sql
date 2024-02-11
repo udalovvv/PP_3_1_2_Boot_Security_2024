@@ -3,8 +3,8 @@ VALUES ('1', 'admin@mail.ru', 'admin', 'admin', '$2a$12$iCZIGBvFU6Yud/n15FBFzu95
 -- password = admin
 
 INSERT INTO users (`age`, `email`, `first_name`, `last_name`, `password`)
-VALUES ('2', 'user@mail.ru', 'user', 'user', '$2a$12$7nQFArHFyDuVN0uH13O7ius6ij/D.Ywv0EoETOGgK4zcVCnkyVls6');
--- password = 1
+VALUES ('2', 'user@mail.ru', 'user', 'user', '$2a$12$1iGRrj7Ho1wyTRvBb73p1.peJUtfJRJOQ5nMLOTjZsIhPMNBuio9C');
+-- password = user
 
 INSERT INTO roles (`role`)
 VALUES ('ADMIN');
