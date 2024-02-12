@@ -12,6 +12,7 @@ import ru.kata.spring.boot_security.demo.entity.User;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -78,11 +79,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
+
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (userRepository.findByEmail(username) == null) {
             throw new UsernameNotFoundException("User is not found");
         }
         return userRepository.findByEmail(username);
+    }
+
+    public boolean userFoundByEmail(String email)  {
+        try {
+            userRepository.findByEmail(email);
+            return true;
+        } catch (NoResultException noResultException) {
+            return false;
+        }
     }
 }

@@ -54,7 +54,7 @@ public class AdminController {
                       BindingResult bindingResult,
                       Authentication authentication,
                       Model userModel) {
-        if (userService.findByEmail(user.getEmail()) != null) {
+        if (userService.userFoundByEmail(user.getEmail())) {
             bindingResult.rejectValue("email", "error.user",
                     "Пользователь с таким email уже существует");
         }

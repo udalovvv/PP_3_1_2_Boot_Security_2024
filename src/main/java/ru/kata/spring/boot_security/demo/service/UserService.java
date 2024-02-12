@@ -20,4 +20,6 @@ public interface UserService {
 
     public UserDetails findByEmail(String email);
 
+    public boolean userFoundByEmail(String email);
+
 }

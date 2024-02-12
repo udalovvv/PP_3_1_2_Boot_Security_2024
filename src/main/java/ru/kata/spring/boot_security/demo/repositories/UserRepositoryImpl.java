@@ -53,14 +53,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User findByEmail(String username) {
+    public User findByEmail(String username) throws NoResultException {
         String hql = "Select u from User u left join fetch u.roles where u.email=:emailParam";
-        try {
-            em.createQuery(hql).setParameter("emailParam", username).getSingleResult();
-        } catch (NoResultException noResultException) {
-            return null;
-        }
-
         return (User) em.createQuery(hql).setParameter("emailParam", username).getSingleResult();
     }
 }
